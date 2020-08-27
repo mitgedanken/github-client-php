@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/../GitHubObject.php');
 
-    
+
 
 class GitHubRepoContent extends GitHubObject
 {
@@ -24,7 +24,7 @@ class GitHubRepoContent extends GitHubObject
             'html_url' => 'string',
         ));
     }
-    
+
     /**
      * @var string
      */

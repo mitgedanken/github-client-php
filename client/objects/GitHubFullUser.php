@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/GitHubUser.php');
 
-    
+
 
 class GitHubFullUser extends GitHubUser
 {
@@ -30,7 +30,7 @@ class GitHubFullUser extends GitHubUser
             'avatar_url' => 'string',
         ));
     }
-    
+
     /**
      * @var string
      */

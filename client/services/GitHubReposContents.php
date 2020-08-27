@@ -22,7 +22,7 @@ class GitHubReposContents extends GitHubService
         if (!is_null($ref)) {
             $data['ref'] = $ref;
         }
-        
+
         return $this->client->request("/repos/$owner/$repo/readme", 'GET', $data, 200, 'GitHubRepoContent');
     }
 
@@ -38,10 +38,10 @@ class GitHubReposContents extends GitHubService
         if (!is_null($ref)) {
             $data['ref'] = $ref;
         }
-        
+
         return $this->client->request("/repos/$owner/$repo/contents/$path", 'GET', $data, 200, 'GitHubContents');
     }
-    
+
     /**
      * Create a file
      *
@@ -57,7 +57,7 @@ class GitHubReposContents extends GitHubService
         $data['message'] = $msg;
         $data['content'] = $content;
         $data['branch'] = $branch;
-        
+
         return $this->client->request("/repos/$owner/$repo/contents/$path", 'PUT', $data, 201, 'GitHubRepoCommit');
     }
 

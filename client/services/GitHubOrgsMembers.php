@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../GitHubClient.php');
 require_once(__DIR__ . '/../GitHubService.php');
 require_once(__DIR__ . '/../objects/GitHubUser.php');
-    
+
 
 class GitHubOrgsMembers extends GitHubService
 {
@@ -16,10 +16,10 @@ class GitHubOrgsMembers extends GitHubService
     public function membersList($org)
     {
         $data = array();
-        
+
         return $this->client->request("/orgs/$org/members", 'GET', $data, 200, 'GitHubUser', true);
     }
-    
+
     /**
      * Remove member
      *
@@ -27,10 +27,10 @@ class GitHubOrgsMembers extends GitHubService
     public function removeMember($org, $user)
     {
         $data = array();
-        
+
         return $this->client->request("/orgs/$org/members/$user", 'DELETE', $data, 204, '');
     }
-    
+
     /**
      * Remove member
      * @deprecated
@@ -39,7 +39,7 @@ class GitHubOrgsMembers extends GitHubService
     {
         return $this->removeMember($org, $user);
     }
-    
+
     /**
      * Public members list
      *
@@ -48,10 +48,10 @@ class GitHubOrgsMembers extends GitHubService
     public function publicMembersList($org)
     {
         $data = array();
-        
+
         return $this->client->request("/orgs/$org/public_members", 'GET', $data, 200, 'GitHubUser', true);
     }
-    
+
     /**
      * Check public membership
      *
@@ -59,7 +59,7 @@ class GitHubOrgsMembers extends GitHubService
     public function checkPublicMembership($org, $user)
     {
         $data = array();
-        
+
         return $this->client->request("/orgs/$org/public_members/$user", 'PUT', $data, 204, '');
     }
 }

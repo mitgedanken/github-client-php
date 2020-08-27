@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../objects/GitHubTeam.php');
 require_once(__DIR__ . '/../objects/GitHubFullTeam.php');
 require_once(__DIR__ . '/../objects/GitHubUser.php');
 require_once(__DIR__ . '/../objects/GitHubRepo.php');
-    
+
 
 class GitHubOrgsTeams extends GitHubService
 {
@@ -19,10 +19,10 @@ class GitHubOrgsTeams extends GitHubService
     public function listTeams($org)
     {
         $data = array();
-        
+
         return $this->client->request("/orgs/$org/teams", 'GET', $data, 200, 'GitHubTeam', true);
     }
-    
+
     /**
      * Get team
      *
@@ -31,10 +31,10 @@ class GitHubOrgsTeams extends GitHubService
     public function getTeam($id)
     {
         $data = array();
-        
+
         return $this->client->request("/teams/$id", 'GET', $data, 200, 'GitHubFullTeam', false);
     }
-    
+
     /**
      * Create team
      *
@@ -44,7 +44,7 @@ class GitHubOrgsTeams extends GitHubService
     {
         $data = array();
         $data['name'] = $name;
-        
+
         if (!is_null($repo_names)) {
             $data['repo_names'] = $repo_names;
         }
@@ -54,10 +54,10 @@ class GitHubOrgsTeams extends GitHubService
         }
 
         $data = json_encode($data);
-        
+
         return $this->client->request("/orgs/$org/teams", 'POST', $data, 201, 'GitHubFullTeam');
     }
-    
+
     /**
      * Delete team
      *
@@ -65,10 +65,10 @@ class GitHubOrgsTeams extends GitHubService
     public function deleteTeam($id)
     {
         $data = array();
-        
+
         return $this->client->request("/teams/$id", 'DELETE', $data, 204, '');
     }
-    
+
     /**
      * List team members
      *
@@ -77,10 +77,10 @@ class GitHubOrgsTeams extends GitHubService
     public function listTeamMembers($id)
     {
         $data = array();
-        
+
         return $this->client->request("/teams/$id/members", 'GET', $data, 200, 'GitHubUser', true);
     }
-    
+
     /**
      * Get team member
      *
@@ -88,7 +88,7 @@ class GitHubOrgsTeams extends GitHubService
     public function getTeamMember($id, $user)
     {
         $data = array();
-        
+
         return $this->client->request("/teams/$id/memberships/$user", 'GET', $data, 200, '');
     }
 
@@ -109,7 +109,7 @@ class GitHubOrgsTeams extends GitHubService
         $data = array();
         return $this->client->request("/teams/$id/repos/$org/$repo", 'PUT', $data, 204, '');
     }
-    
+
     /**
      * Remove team member
      *
@@ -117,10 +117,10 @@ class GitHubOrgsTeams extends GitHubService
     public function removeTeamMember($id, $user)
     {
         $data = array();
-        
+
         return $this->client->request("/teams/$id/memberships/$user", 'DELETE', $data, 204, '');
     }
-    
+
     /**
      * List team repos
      *
@@ -129,10 +129,10 @@ class GitHubOrgsTeams extends GitHubService
     public function listTeamRepos($id)
     {
         $data = array();
-        
+
         return $this->client->request("/teams/$id/repos", 'GET', $data, 200, 'GitHubRepo', true);
     }
-    
+
     /**
      * Get team repo
      *
@@ -140,10 +140,10 @@ class GitHubOrgsTeams extends GitHubService
     public function getTeamRepo($id, $org, $repo)
     {
         $data = array();
-        
+
         return $this->client->request("/teams/$id/repos/$org/$repo", 'PUT', $data, 204, '');
     }
-    
+
     /**
      * Remove team repo
      *
@@ -151,7 +151,7 @@ class GitHubOrgsTeams extends GitHubService
     public function removeTeamRepo($id, $owner, $repo)
     {
         $data = array();
-        
+
         return $this->client->request("/teams/$id/repos/$owner/$repo", 'DELETE', $data, 204, '');
     }
 }

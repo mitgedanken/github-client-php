@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../GitHubClient.php');
 require_once(__DIR__ . '/../GitHubService.php');
 require_once(__DIR__ . '/../objects/GitHubMilestone.php');
-    
+
 
 class GitHubIssuesMilestones extends GitHubService
 {
@@ -16,7 +16,7 @@ class GitHubIssuesMilestones extends GitHubService
     public function listMilestonesForRepository($owner, $repo)
     {
         $data = array();
-    
+
         return $this->client->request("/repos/$owner/$repo/milestones", 'GET', $data, 200, 'GitHubMilestone', true);
     }
 
@@ -28,10 +28,10 @@ class GitHubIssuesMilestones extends GitHubService
     public function getSingleMilestone($owner, $repo, $number)
     {
         $data = array();
-    
+
         return $this->client->request("/repos/$owner/$repo/milestones/$number", 'GET', $data, 200, 'GitHubMilestone');
     }
-    
+
     /**
      * Create a milestone
      *
@@ -53,10 +53,10 @@ class GitHubIssuesMilestones extends GitHubService
         if (!is_null($due_on)) {
             $data['due_on'] = $due_on;
         }
-        
+
         return $this->client->request("/repos/$owner/$repo/milestones", 'POST', json_encode($data), 201, 'GitHubMilestone');
     }
-    
+
     /**
      * Update a milestone
      *
@@ -80,10 +80,10 @@ class GitHubIssuesMilestones extends GitHubService
         if (!is_null($due_on)) {
             $data['due_on'] = $due_on;
         }
-        
+
         return $this->client->request("/repos/$owner/$repo/milestones/$number", 'PATCH', json_encode($data), 200, 'GitHubMilestone');
     }
-    
+
     /**
      * Delete a milestone
      *
@@ -91,7 +91,7 @@ class GitHubIssuesMilestones extends GitHubService
     public function deleteMilestone($owner, $repo, $number)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/milestones/$number", 'DELETE', $data, 204, '');
     }
 }

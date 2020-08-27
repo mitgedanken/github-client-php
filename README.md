@@ -1,6 +1,7 @@
 # GitHub API PHP Client
 
-See [full API reference](https://github.com/tan-tan-kanarek/github-php-client/blob/master/client.md "full API reference")
+See
+[full API reference](https://github.com/tan-tan-kanarek/github-php-client/blob/master/client.md "full API reference")
 
 ## Authenticating
 
@@ -132,7 +133,7 @@ foreach($repos as $repo)
 	$pageSize = 4;
 	$client->setPage();
 	$client->setPageSize($pageSize);
-	
+
 	$commits = $client->repos->commits->listCommitsOnRepository($owner, $repo);
 	while(true)
 	{
@@ -143,14 +144,14 @@ foreach($repos as $repo)
 			/* @var $commit GitHubCommit */
 			$sha = $commit->getSha();
 			$message = $commit->getCommit()->getMessage();
-			
+
 			echo "\t$sha - $message\n";
 		}
-		
+
 
 		if(!$client->hasNextPage())
 			break;
-			
+
 		$commits = $client->getNextPage();
 		if($client->getPage() == $page)
 			break;
@@ -158,8 +159,6 @@ foreach($repos as $repo)
 }
 ```
 
-
-*[8/06/2015] Fixed pull request comment function
-
+\*[8/06/2015] Fixed pull request comment function
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ivanfemia/github-php-client/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

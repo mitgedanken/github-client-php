@@ -1,8 +1,11 @@
 {
-  "name": "tan-tan-kanarek/github-php-client",
+  "name": "",
   "description": "PHP client for the Github API",
-  "license": "proprietary",
+  "license": "",
   "autoload": {
     "classmap": ["client/"]
+  }
+  "require": {
+    "php": "7.4"
   }
 }

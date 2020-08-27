@@ -1,87 +1,100 @@
 <?php
+declare(strict_types=1);
 
-chdir(__DIR__);
+\defined('CLIENT_ROOT') ?: \define('CLIENT_ROOT', __DIR__);
+\chdir(CLIENT_ROOT);
 
-if(!file_exists(__DIR__ . '/client'))
-	mkdir(__DIR__ . '/client');
-if(!file_exists(__DIR__ . '/client/services'))
-	mkdir(__DIR__ . '/client/services');
-if(!file_exists(__DIR__ . '/client/objects'))
-	mkdir(__DIR__ . '/client/objects');
-	
-$resources = str_replace("\r", '', file_get_contents(__DIR__ . '/resources.rb'));
+# @todo rewrite
+$client_dirlist = [
+    'client/services',
+    'client/objects',
+];
 
-$sourceDir = dir(__DIR__ . '/source');
-while (false !== ($entry = $sourceDir->read())) 
+# @todo rewrite
 {
-	if($entry[0] != '.')
-		copy(__DIR__ . '/source/' . $entry, __DIR__ . '/client/' . $entry);
+    $default_mode = 0755;
+    $recursive = true;
+    $result = false;
+
+    foreach ($client_dirlist as $directory):
+        if(! \is_dir($directory):
+            $result = \mkdir(CLIENT_ROOT . "/{$directory}", $default_mode, $recursive);
+        elseif(! \is_writable($directory)):
+            $result = \chmod($directory, $default_mode);
+        else:
+            #@todo error or exception?
+        endif;
+    endforeach;
 }
+
+$resources = \str_replace("\r", '', \file_get_contents(__DIR__ . '/resources.rb'));
+
+# @todo rewrite
+$sourceDir = dir(CLIENT_ROOT . '/source');
+do {
+    $entry = $sourceDir->read();
+    
+	if($entry[0] !== '.'):
+		\copy(CLIENT_ROOT . "/source/{$entry}", CLIENT_ROOT . "/client/{$entry}");
+    endif;
+} while ($entry === true)
 $sourceDir->close();
 
-$classTree = array();
-$objects = array();
-scanDirectory(realpath('v3'));
+$classTree = [];
+$objects = [];
+scanDirectory($classTree, \realpath('v3'));
 generateGithubClient();
 generateGithubObjects();
 generateGithubDoc();
 
-function scanDirectory($dir, $classPath = array())
-{
-	global $classTree;
-	
+# @todo rewrite use of glob?
+function scanDirectory(array $classTree, string $dir, array $classPath = [])
+{	
 	$d = dir($dir);
-	echo "Scanning directory: " . $d->path . "\n";
-	while (false !== ($entry = $d->read())) 
-	{
-		if($entry[0] == '.')
+	echo "Scanning directory  {$d->path}\n";
+	while (false !== ($entry = $d->read())):
+		if($entry[0] == '.'):
 			continue;
+        endif;
 
-		$entryPath = $d->path . DIRECTORY_SEPARATOR . $entry;
+		$entryPath = "{$d->path}/{$entry}";
 		$entryClassPath = $classPath;
 		$entryClassPath[] = preg_replace('/.md$/', '', $entry);
-		if(is_dir($entryPath))
-		{
+		if(\is_dir($entryPath)):
 			scanDirectory($entryPath, $entryClassPath);
-		}
-		else
-		{
+		else:
 			$entryName = implode('', array_map('ucfirst', $entryClassPath));
 			$parentClassPath = '/' . implode('/', $classPath);
 			if(!isset($classTree[$parentClassPath]))
-				$classTree[$parentClassPath] = array();
+				$classTree[$parentClassPath] = [];
 				
 			$classTree[$parentClassPath][$entryPath] = $entryName;
-		}
-	}
+        endif;
+    endwhile;
 	$d->close();
 }
 
-function generateGithubDoc()
-{
-	global $classTree;
-	
-	$doc = "
+# @todo rewrite
+function generateGithubDoc(array $classTree) {	
+    $doc = "---
+# GitHub API PHP Client
 ---
-#GitHub API PHP Client
----
-
 ";
 
-	foreach($classTree['/'] as $file => $className)
-	{	
-		$varName = lcfirst($className);
+    foreach($classTree['/'] as $file => $className)	
+		$varName = \lcfirst($className);
 		$doc .= "
 ## GitHub$className
 Could be access directly from GitHubClient->$varName
 ";
 		$doc .= appendGithubServiceDoc($file, $className);
-	}
+	endforeach;
 	
-	file_put_contents(__DIR__ . "/client.md", $doc);
+	\file_put_contents(CLIENT_ROOT . "/client.md", $doc);
 }
 
-function appendGithubServiceDoc($file, $name)
+# @todo rewrite
+function appendGithubServiceDoc(string $file, string $name)
 {
 	global $classTree, $objects;
 	
@@ -96,7 +109,7 @@ List all notifications for the current user, grouped by repository.
     GET /notifications
 ';
 	
-	preg_match_all('/## ([^\n]+)\n\n(.*)(\n\n)?    (GET|PUT|PATCH|DELETE) ([^\n]+)\n\n(([^\n]+\n)+\n)?(### (Parameters|Input)\n\n([^#]+))?### Response\n(\n<%= headers (\d+) %>)?(\n<%= json( :([^\s]+) |\(:([^\)]+)\) [^%]*)%>)?\n\n/sU', $content, $matches);
+	\preg_match_all('/## ([^\n]+)\n\n(.*)(\n\n)?    (GET|PUT|PATCH|DELETE) ([^\n]+)\n\n(([^\n]+\n)+\n)?(### (Parameters|Input)\n\n([^#]+))?### Response\n(\n<%= headers (\d+) %>)?(\n<%= json( :([^\s]+) |\(:([^\)]+)\) [^%]*)%>)?\n\n/sU', $content, $matches);
 
 	$doc = '
 ### Attributes:
@@ -106,7 +119,7 @@ List all notifications for the current user, grouped by repository.
 	{
 		foreach($classTree[$classPath] as $file => $className)
 		{
-			$varName = lcfirst(preg_replace("/^$name/", '', $className));
+			$varName = \lcfirst(preg_replace("/^$name/", '', $className));
 			$doc .= "
  - GitHub$className $varName";
 		}
@@ -171,10 +184,10 @@ List all notifications for the current user, grouped by repository.
 		$arguments = implode(', ', $arguments);
 		$doc .= "
 
-**$methodName:**
+**{$methodName}**
 
 Expected HTTP status: $expectedStatus
-*$description*
+*{$description}*
 
 
 Attributes:
@@ -183,7 +196,7 @@ Attributes:
 		foreach($docCommentParameters as $docCommentParameter)
 		{
 			$doc .= "
- - $docCommentParameter";
+ - {$docCommentParameter}";
 		}
 						
 		$responseType = null;
@@ -220,11 +233,11 @@ Returns $returnType object";
 		}
 	}
 
-	if(isset($classTree[$classPath]))
+	if(\isset($classTree[$classPath]))
 	{	
 		foreach($classTree[$classPath] as $file => $className)
 		{
-			$varName = lcfirst($className);
+			$varName = \lcfirst($className);
 			$doc .= "
 ## GitHub$className
 Could be access directly from GitHubClient->{$name}->{$varName}
@@ -236,7 +249,7 @@ Could be access directly from GitHubClient->{$name}->{$varName}
 	return $doc;
 }
 
-
+# @todo rewrite
 function generateGithubClient()
 {
 	global $classTree;
@@ -287,15 +300,16 @@ class GitHubClient extends GitHubClientBase
 	$requires = implode("\n", $requires);
 	$php = "<?php
 
-require_once(__DIR__ . '/GitHubClientBase.php');
+require_once({CLIENT_ROOT} . '/GitHubClientBase.php');
 $requires
 
 $class
 ";
 
-	file_put_contents(__DIR__ . "/client/GitHubClient.php", $php);
+	\file_put_contents(CLIENT_ROOT . "/client/GitHubClient.php", $php);
 }
 
+# @todo rewrite
 function generateGithubService($file, $name)
 {
 	global $classTree, $objects;
@@ -560,11 +574,13 @@ $class
 	file_put_contents(__DIR__ . "/client/objects/$className.php", $php);
 }
 
+# @todo rewrite
 function gitHubClassName($baseName)
 {
 	return 'GitHub' . str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower($baseName))));
 }
 
+# @todo rewrite
 function parseAttributes($resourceName, $resource, $indent = '      ')
 {
 	global $objects;
@@ -629,6 +645,7 @@ function parseAttributes($resourceName, $resource, $indent = '      ')
 	return $attributes;
 }
 
+# @todo rewrite
 function getObjectAttributes($resourceName, &$extends, $enableExtend = true)
 {
 	global $resources, $objects;
@@ -683,6 +700,7 @@ function getObjectAttributes($resourceName, &$extends, $enableExtend = true)
 	return $attributes;
 }
 
+# @todo rewrite
 function generateGithubObjects()
 {
 	global $objects;

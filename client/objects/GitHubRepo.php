@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/GitHubSimpleRepo.php');
 
-    
+
 
 class GitHubRepo extends GitHubSimpleRepo
 {
@@ -33,7 +33,7 @@ class GitHubRepo extends GitHubSimpleRepo
             'parent' => 'GitHubSimpleRepo',
         ));
     }
-    
+
     /**
      * @var string
      */

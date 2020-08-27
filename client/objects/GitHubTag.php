@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/../GitHubObject.php');
 
-    
+
 
 class GitHubTag extends GitHubObject
 {
@@ -18,7 +18,7 @@ class GitHubTag extends GitHubObject
             'commit' => 'string',
         ));
     }
-    
+
     /**
      * @var string
      */

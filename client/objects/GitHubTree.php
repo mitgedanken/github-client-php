@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/../GitHubObject.php');
 
-    
+
 
 class GitHubTree extends GitHubObject
 {
@@ -20,7 +20,7 @@ class GitHubTree extends GitHubObject
             'url' => 'string',
         ));
     }
-    
+
     /**
      * @var string
      */

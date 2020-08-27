@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../GitHubClient.php');
 require_once(__DIR__ . '/../GitHubService.php');
 require_once(__DIR__ . '/../objects/GitHubPullComment.php');
-    
+
 
 class GitHubPullsComments extends GitHubService
 {
@@ -16,10 +16,10 @@ class GitHubPullsComments extends GitHubService
     public function listCommentsOnPullRequest($owner, $repo, $number)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/pulls/$number/comments", 'GET', $data, 200, 'GitHubPullComment', true);
     }
-    
+
     /**
      * List comments in a repository
      *
@@ -40,10 +40,10 @@ class GitHubPullsComments extends GitHubService
         if (!is_null($since)) {
             $data['since'] = $since;
         }
-        
+
         return $this->client->request("/repos/$owner/$repo/pulls/comments", 'GET', $data, 200, 'GitHubPullComment', true);
     }
-    
+
     /**
      * Get a single comment
      *
@@ -52,10 +52,10 @@ class GitHubPullsComments extends GitHubService
     public function getSingleComment($owner, $repo, $number)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/pulls/comments/$number", 'GET', $data, 200, 'GitHubPullComment');
     }
-    
+
     /**
      * Create a comment
      *
@@ -88,7 +88,7 @@ class GitHubPullsComments extends GitHubService
     public function deleteComment($owner, $repo, $number)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/pulls/comments/$number", 'DELETE', json_encode($data), 204, '');
     }
 }

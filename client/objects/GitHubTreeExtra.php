@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../GitHubObject.php');
 require_once(__DIR__ . '/../objects/GitHubTree.php');
 
-    
+
 
 class GitHubTreeExtra extends GitHubObject
 {
@@ -18,7 +18,7 @@ class GitHubTreeExtra extends GitHubObject
             'tree' => 'array<GitHubTree>',
         ));
     }
-    
+
     /**
      * @var string
      */

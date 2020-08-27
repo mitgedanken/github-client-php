@@ -8,7 +8,7 @@ require_once(__DIR__ . '/GitHubIssuesEvents.php');
 require_once(__DIR__ . '/GitHubIssuesLabels.php');
 require_once(__DIR__ . '/GitHubIssuesMilestones.php');
 require_once(__DIR__ . '/../objects/GitHubIssue.php');
-    
+
 
 class GitHubIssues extends GitHubService
 {
@@ -17,42 +17,42 @@ class GitHubIssues extends GitHubService
      * @var GitHubIssuesAssignees
      */
     public $assignees;
-    
+
     /**
      * @var GitHubIssuesComments
      */
     public $comments;
-    
+
     /**
      * @var GitHubIssuesEvents
      */
     public $events;
-    
+
     /**
      * @var GitHubIssuesLabels
      */
     public $labels;
-    
+
     /**
      * @var GitHubIssuesMilestones
      */
     public $milestones;
-    
-    
+
+
     /**
      * Initialize sub services
      */
     public function __construct(GitHubClient $client)
     {
         parent::__construct($client);
-        
+
         $this->assignees = new GitHubIssuesAssignees($client);
         $this->comments = new GitHubIssuesComments($client);
         $this->events = new GitHubIssuesEvents($client);
         $this->labels = new GitHubIssuesLabels($client);
         $this->milestones = new GitHubIssuesMilestones($client);
     }
-    
+
     /**
      * List all issues
      * @param $owner boolean|string true, for all my issues, false, for all issues or organization name all issues
@@ -92,17 +92,17 @@ class GitHubIssues extends GitHubService
         if (!is_null($since)) {
             $data['since'] = $since;
         }
-        
+
         $path = '/issues';
         if ($owner === true) {
             $path = '/user/issues';
         } elseif (is_string($owner)) {
             $path = "/orgs/$owner/issues";
         }
-        
+
         return $this->client->request($path, 'GET', $data, 200, 'GitHubIssue', true);
     }
-    
+
     /**
      * List issues
      *
@@ -151,7 +151,7 @@ class GitHubIssues extends GitHubService
 
         return $this->client->request("/repos/$owner/$repo/issues", 'GET', $data, 200, 'GitHubIssue', true);
     }
-    
+
     /**
      * List issues
      *
@@ -160,10 +160,10 @@ class GitHubIssues extends GitHubService
     public function getIssue($owner, $repo, $number)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/issues/$number", 'GET', $data, 200, 'GitHubIssue');
     }
-    
+
     /**
      * Create an issue
      *
@@ -201,7 +201,7 @@ class GitHubIssues extends GitHubService
         }
 
         $data = json_encode($data);
-        
+
         return $this->client->request("/repos/$owner/$repo/issues", 'POST', $data, 201, 'GitHubIssue');
     }
 
@@ -245,7 +245,7 @@ class GitHubIssues extends GitHubService
             }
             $data['assignees'] = $assignees;
         }
-        
+
         return $this->client->request("/repos/$owner/$repo/issues/$number", 'PATCH', $data, 200, 'GitHubIssue');
     }
 }

@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../GitHubClient.php');
 require_once(__DIR__ . '/../GitHubService.php');
 require_once(__DIR__ . '/../objects/GitHubUser.php');
-    
+
 class GitHubReposCollaborators extends GitHubService
 {
 
@@ -15,10 +15,10 @@ class GitHubReposCollaborators extends GitHubService
     public function listReposCollaborators($owner, $repo)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/collaborators", 'GET', $data, 200, 'GitHubUser', true);
     }
-    
+
     /**
      * PUT
      *
@@ -26,10 +26,10 @@ class GitHubReposCollaborators extends GitHubService
     public function put($owner, $repo, $user)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/collaborators/$user", 'PUT', $data, 201, '');
     }
-    
+
     /**
      * Get
      *
@@ -47,7 +47,7 @@ class GitHubReposCollaborators extends GitHubService
     public function delete($owner, $repo, $user)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/collaborators/$user", 'DELETE', $data, 204, '');
     }
 }

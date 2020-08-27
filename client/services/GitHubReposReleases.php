@@ -4,7 +4,7 @@ require_once(__DIR__ . '/../GitHubClient.php');
 require_once(__DIR__ . '/../GitHubService.php');
 require_once(__DIR__ . '/../objects/GitHubReposRelease.php');
 require_once(__DIR__ . '/GitHubReposReleasesAssets.php');
-    
+
 
 class GitHubReposReleases extends GitHubService
 {
@@ -19,10 +19,10 @@ class GitHubReposReleases extends GitHubService
     public function __construct(GitHubClient $client)
     {
         parent::__construct($client);
-        
+
         $this->assets = new GitHubReposReleasesAssets($client);
     }
-    
+
     /**
      * List
      *
@@ -31,10 +31,10 @@ class GitHubReposReleases extends GitHubService
     public function listReposReleases($owner, $repo)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/releases", 'GET', $data, 200, 'GitHubReposRelease', true);
     }
-    
+
     /**
      * Get
      *
@@ -43,10 +43,10 @@ class GitHubReposReleases extends GitHubService
     public function get($owner, $repo, $id)
     {
         $data = array();
-        
+
         return $this->client->request("/repos/$owner/$repo/releases/$id", 'GET', $data, 200, 'GitHubReposRelease');
     }
-    
+
     /**
      * Create
      * @param $tag_name string (Required) The name of the tag.
@@ -77,12 +77,12 @@ class GitHubReposReleases extends GitHubService
         if (!is_null($prerelease)) {
             $data['prerelease'] = $prerelease;
         }
-            
+
         $data = json_encode($data);
-        
+
         return $this->client->request("/repos/$owner/$repo/releases", 'POST', $data, 201, 'GitHubReposRelease');
     }
-    
+
     /**
      * Create
      * @param $id int (Required) Release id.
